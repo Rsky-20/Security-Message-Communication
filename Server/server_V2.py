@@ -6,6 +6,9 @@ HOST = '127.0.0.1'
 
 PORT = 50100
 
+client_connected = []
+read_client = []
+
 
 def documentation():
     print('#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#')
@@ -35,7 +38,7 @@ def process_server(msg_recv):
     return response
 
 
-def connexion_server(HOST, PORT):
+def connexion_server():
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -45,8 +48,6 @@ def connexion_server(HOST, PORT):
     print(s)
 
     server_ready = True
-    client_connected = []
-    read_client = []
 
     while server_ready:
 
@@ -55,9 +56,9 @@ def connexion_server(HOST, PORT):
         for connexion in wait_connexions:
             connexion_client, info_connexion = connexion.accept()
             client_connected.append(connexion_client)
-            print(client_connected)
+            print(connexion_client)
 
-            ########################################################################################################################
+########################################################################################################################
 
             for client in client_connected:
                 msg_recv = client.recv(1024)
@@ -101,7 +102,7 @@ def connexion_server(HOST, PORT):
 
                 client.sendall(byte_data)
 
-    ########################################################################################################################
+########################################################################################################################
 
     print("Close all connections")
     for client in client_connected:
@@ -115,7 +116,7 @@ def run():
 
     while True:
 
-        connexion_server(HOST, PORT)
+        connexion_server()
 
 documentation()
 run()
