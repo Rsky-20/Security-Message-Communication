@@ -1,39 +1,28 @@
 
+
 import socket
 
-
-HOST = '127.0.0.1'
+# Rassemble les donnees renseignees sur l'ip afin de le retranscrire dans le socket
+HOST = '127.0.0.1' #'172.20.10.2'
 
 print(HOST)
 
-# Le port utilisé par le serveur.
-#On peut demander le port de dialogue avec le serveur à l'utilisateur (on rentre obligatoirement un int)
-#PORT = input(int("Renseigner la valeur du port d'ecoute (exemple : 1111) : "))
-#input(int("renseigner le port sur lequel le serveur ecoute"))
-PORT = 50105
+
+PORT = 50100
 
 
 def send(request):
-    """
-     Crée un connecteur (socket) et lui envoie des données
-
-     AF_INET représente la famille d'adresse IPv4.
-     SOCK_STREAM représente le protocole TCP.
-
-     Arguments:
-       request: Une chaîne de carcatères représentant des données.
-    """
 
     # Création d'un objet socket nommé s.
     # with permet de fermer le connecteur après utilisation et en cas d'erreur.
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s2:
 
         # Connexion à la socket distante d'adresse ip HOST sur le port PORT
-        s.connect((HOST, PORT))
+        s2.connect((HOST, PORT))
 
         # getsockname retourne un tuple constitué de l'adresse ip et le port
         # utlisé par le client.
-        print('CLIENT : ' + s.getsockname()[0] + ':' + str(s.getsockname()[1]))
+        print('CLIENT : ' + s2.getsockname()[0] + ':' + str(s2.getsockname()[1]))
 
         print('SERVER : ' + HOST + ':' + str(PORT))
 
@@ -41,12 +30,12 @@ def send(request):
         byte_data = request.encode()
 
         # Envoie les donnée sur la socket.
-        s.sendall(byte_data)
+        s2.sendall(byte_data)
 
         # Récupération des données du connecteur.
         # 1024 octets au maximum.
         # recv retourne un bytearray
-        byte_data = s.recv(1024)
+        byte_data = s2.recv(1024)
 
         # Si la réponse n'est pas vide on la traite
         if byte_data:
@@ -56,24 +45,18 @@ def send(request):
 
 
 def process_response(response, request):
-    """
-    Traite les données reçues du serveur.
 
-        Arguments:
-            response: Les données de type str
-    """
 
     print('Response: ' + response)
     data_exit = "Le chiffre {} correspond a celui du server !".format(request)
     if response == data_exit:
         exit()
 
+    return response
+
 
 def run():
-    """
-    Démarre le client.
-    Eteint le client si reponse vide
-    """
+
 
     while True:
 
