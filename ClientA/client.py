@@ -1,88 +1,91 @@
-
 import socket
+import zipfile
+import glob
+import os
+
+HOST = "127.0.0.1"
+
+PORT = 50100
+
+fid_client = input("Give your Friend Id_client (like => #jhd62j2hkzp: ")
+id_client = '#8hd27dh1js2'
 
 
-HOST = '127.0.0.1'
+def zipdirectory(filezip, pathzip):
+    # Cette fonction cree une archive Zip. Elle est utlisee pour faire des sauvegardes lors de la deconnexion.
+    lenpathparent = len(pathzip) + 1  ## utile si on veut stocker les chemins relatifs
 
-print(HOST)
+    def _zipdirectory(zfile, path):
+        for i in glob.glob(path + '/*'):
+            if os.path.isdir(i):
+                _zipdirectory(zfile, i)
+            else:
+                zfile.write(i, i[lenpathparent:])  ## zfile.write(i) pour stocker les chemins complets
 
-# Le port utilisé par le serveur.
-#On peut demander le port de dialogue avec le serveur à l'utilisateur (on rentre obligatoirement un int)
-#PORT = input(int("Renseigner la valeur du port d'ecoute (exemple : 1111) : "))
-#input(int("renseigner le port sur lequel le serveur ecoute"))
-PORT = 50105
-
-
-def send(request):
-    """
-     Crée un connecteur (socket) et lui envoie des données
-
-     AF_INET représente la famille d'adresse IPv4.
-     SOCK_STREAM représente le protocole TCP.
-
-     Arguments:
-       request: Une chaîne de carcatères représentant des données.
-    """
-
-    # Création d'un objet socket nommé s.
-    # with permet de fermer le connecteur après utilisation et en cas d'erreur.
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-
-        # Connexion à la socket distante d'adresse ip HOST sur le port PORT
-        s.connect((HOST, PORT))
-
-        # getsockname retourne un tuple constitué de l'adresse ip et le port
-        # utlisé par le client.
-        print('CLIENT : ' + s.getsockname()[0] + ':' + str(s.getsockname()[1]))
-
-        print('SERVER : ' + HOST + ':' + str(PORT))
-
-        # encode convertis un str en bytearray.
-        byte_data = request.encode()
-
-        # Envoie les donnée sur la socket.
-        s.sendall(byte_data)
-
-        # Récupération des données du connecteur.
-        # 1024 octets au maximum.
-        # recv retourne un bytearray
-        byte_data = s.recv(1024)
-
-        # Si la réponse n'est pas vide on la traite
-        if byte_data:
-            # decode convertis un bytearray en str.
-            response = byte_data.decode()
-            process_response(response,request)
+    zfile = zipfile.ZipFile(filezip, 'w', compression=zipfile.ZIP_DEFLATED)
+    _zipdirectory(zfile, pathzip)
+    zfile.close()
 
 
-def process_response(response, request):
-    """
-    Traite les données reçues du serveur.
+def dezip(filezip, pathdst=''):
+    if pathdst == '': pathdst = os.getcwd()  ## on dezippe dans le repertoire locale
+    zfile = zipfile.ZipFile(filezip, 'r')
+    for i in zfile.namelist():  ## On parcourt l'ensemble des fichiers de l'archive
+        if os.path.isdir(i):  ## S'il s'agit d'un repertoire, on se contente de creer le dossier
+            try:
+                os.makedirs(pathdst + os.sep + i)
+            except:
+                pass
+        else:
+            try:
+                os.makedirs(pathdst + os.sep + os.path.dirname(i))
+            except:
+                pass
+            data = zfile.read(i)  ## lecture du fichier compresse
+            fp = open(pathdst + os.sep + i, "wb")  ## creation en local du nouveau fichier
+            fp.write(data)  ## ajout des donnees du fichier compresse dans le fichier local
+            fp.close()
+    zfile.close()
 
-        Arguments:
-            response: Les données de type str
-    """
 
+def process_response(response):
     print('Response: ' + response)
-    data_exit = "Le chiffre {} correspond a celui du server !".format(request)
-    if response == data_exit:
-        exit()
+
+    return response
+
+
+def connexion_server(HOST, PORT):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.connect((HOST, PORT))
+    #s.listen(10)
+
+    print("Connexion établie avec le serveur sur le port {}".format(PORT))
+    print('\033[31m' + 'CLIENT  ' + '\033[36m' + s.getsockname()[0] + ':' + '\033[33m' + str(s.getsockname()[1]))
+    print('\033[31m' + 'SERVER  ' + '\033[36m' + HOST + ':' + '\033[33m' + str(PORT))
+
+
+    send_msg = b""
+    while send_msg != b"/disconnection":
+        send_msg = input("> ")
+        send_msg = fid_client + "@" + send_msg
+
+        sending_msg = send_msg.encode()
+        s.sendall(sending_msg)
+
+        msg_recv = s.recv(1024)
+
+        response = msg_recv.decode()
+        print("> {}".format(response))
+
+        process_response(response)
+
+    print("Close all connection")
+    s.close()
 
 
 def run():
-    """
-    Démarre le client.
-    Eteint le client si reponse vide
-    """
+    connexion_server(HOST, PORT)
 
-    while True:
 
-        request = input('\nRequest: ')
-
-        if request == '':
-            break
-
-        send(request)
-
-# Execution de la fonction qui demarre le client
 run()
