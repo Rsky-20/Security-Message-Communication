@@ -1,13 +1,7 @@
 
 import socket
 
-id_network1 = input("Donnez l'id du reseaux (exemple : 127) : ")
-id_network2 = input("Donnez l'id du reseaux (exemple : 0) : ")
-id_network3 = input("Donnez l'id de l'hote (exemple : 0) : ")
-id_network4 = input("Donnez le numero de l'hote (exemple : 1) : ")
-print()
-
-HOST = str(id_network1 + "." + id_network2 + "." + id_network3 + "." + id_network4)
+HOST ="127.0.0.1"
 
 print(HOST)
 
