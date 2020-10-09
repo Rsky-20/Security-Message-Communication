@@ -18,7 +18,7 @@ def chiffrementAffine(a,b,L):
         x=data.index(L)
         y=(a*x+b)%97
         return data[y]
-# Calcul de l'inverse d'un nombre modulo 26
+# Calcul de l'inverse d'un nombre modulo 97
 def inverse(a):
         x=0
         while (a*x%97!=1):
@@ -37,7 +37,7 @@ def crypt(M,a,b):
                 mot.append(chiffrementAffine(a,b,M[i]))
         return "".join(mot)
     else:
-        return "Chiffrement impossible. Veuillez choisir un nombre ( a ) premier avec 26."
+        return "Chiffrement impossible. Veuillez choisir un nombre ( a ) premier avec 97."
 # Affichage du mot déchiffré
 def decrypt(M,a,b):
     if (pgcd(a,97)==1):
@@ -46,7 +46,7 @@ def decrypt(M,a,b):
                 mot.append(dechiffrementAffine(a,b,M[i]))
         return "".join(mot)
     else:
-        return "Déchiffrement impossible. Le nombre a n'est pas premier avec 26"
+        return "Déchiffrement impossible. Le nombre a n'est pas premier avec 97"
 
 '_________________________________________________________________________________________________________________________________________________________________________'
 
@@ -70,24 +70,19 @@ def send(request):
             response = byte_data.decode()
             process_response(response,request)
 
-
 def process_response(response, request):
-
     print('Response: ' + response)
-    data_exit = "Le chiffre {} correspond a celui du server !".format(request)
-    if response == data_exit:
-        exit()
-
 
 def run():
 
     while True:
 
-        request = input('\nRequest: ')
-
+        request = input('\nEnter Message ... : ')
+        
         if request == '':
             break
 
         send(request)
 
 run()
+'_______________________________________________________________________________________________________________________________________________________________'
