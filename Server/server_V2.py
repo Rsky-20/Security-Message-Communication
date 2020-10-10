@@ -39,7 +39,6 @@ def process_server(msg_recv):
 
 
 def connexion_server():
-
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind((HOST, PORT))
@@ -115,8 +114,8 @@ def run():
     print('[' + '\033[31m' + 'SERVER@' + '\033[36m' + HOST + ' ' + '\033[33m' + '-p' + str(PORT) + '\033[39m' + ']:\n')
 
     while True:
-
         connexion_server()
+
 
 documentation()
 run()
