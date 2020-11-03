@@ -16,24 +16,6 @@ def log(user,text):
     log.write(user+"["+datetime.datetime.isoformat(datetime.datetime.now())+"]"+text+"\n")
     log.close()
 
-"""def verif_path(path, folder = False):
-    if folder:
-        path+=os.sep+"creating_file"
-    if not os.path.exists(path):
-        original_path = os.getcwd()
-        path_to_create = ""
-        for x in path.split(os.sep)[:len(path.split(os.sep))-1]:
-            path_to_create += x+os.sep
-            try:
-                os.mkdir(path_to_create)
-            except Exception as error:
-                pass
-        if not folder:
-            a = open(path, "w")
-            a.close()
-
-    else:
-        pass"""
 
 """def find_key_in_dict(data_server, phrase):
     for cle, val in data_server.items():
@@ -43,7 +25,17 @@ def log(user,text):
     return None"""
 
 
-def receive():
+def process_request(request1,request2):
+
+    response2 = request1
+    log('Client1',response2)
+    response1 = request2
+    log('Client1',response1)
+
+    return response1
+
+
+def connexion():
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s1:
 
@@ -112,22 +104,13 @@ def receive():
                 connexion2.sendall(byte_data)
 
 
-def process_request(request1,request2):
 
-    response2 = request1
-    log('Client1',response2)
-    response1 = request2
-    log('Client1',response1)
-
-
-
-    return response1
 
 def run():
 
     print('SERVER  ' + HOST1 + ':' + str(PORT1) + ' / ' + '\n') #+ str(PORT2)
 
     while True:
-        receive()
+        connexion()
 
 run()

@@ -17,26 +17,40 @@ def documentation():
     print('Reste de la doc à venir °°°')
 
 
-def log(response):
+def log(data):
     with open("log.txt", "a") as lmsg:
-        lmsg.write("\n" + "\t[" + datetime.datetime.isoformat(datetime.datetime.now())
-                   + "]\n" + "{\n" + response + "\n}\n" + '#________________________________________________#\n')
+        lmsg.write(data + "\n")
         lmsg.close()
 
 
-def log_connexion(clients_connected):
+def log_connexion(client_connected):
     with open("log_connexion.txt", "a") as lc:
         lc.write(datetime.datetime.isoformat(datetime.datetime.now()) +
-                 "Le client {} est connecté sur le serveur via le port {}".format(clients_connected, PORT))
+                 "Le client {} est connecté sur le serveur via le port {}".format(client_connected, PORT))
         lc.close()
 
 
-def process_server(msg_recv):
-    response = str(msg_recv)
+def process_server(data):
+    response = data
     log(response)
-
     return response
 
+def dict_log():
+    with open('log.txt','r') as lg:
+        cont = []
+        for line in lg:
+            s = line.strip("\n")
+            l = s.split("@")
+            cont.append(l)
+
+    return cont
+
+def str_log(data):
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            str_l = ','.join(data[i-1])
+
+    return str_l
 
 def connexion_server():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,21 +70,34 @@ def connexion_server():
             connexion_client, info_connexion = connexion.accept()
             client_connected.append(connexion_client)
             print(connexion_client)
+            log_connexion(client_connected)
 
-########################################################################################################################
+            ########################################################################################################################
 
             for client in client_connected:
                 msg_recv = client.recv(1024)
 
                 msg_recv = msg_recv.decode()
 
-                print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p', str(PORT),
-                      '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
-
                 if msg_recv == "/disconnexion":
                     server_ready = False
 
-                p_server = process_server(msg_recv)
+                else:
+                    process_server(msg_recv)
+
+                print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p', str(PORT),
+                      '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
+
+
+                ###############################################
+
+                d_l = dict_log()
+
+                c2c = str_log(d_l)
+
+                p_server = c2c
+
+                ###############################################
 
                 byte_data = p_server.encode()
 
@@ -89,19 +116,29 @@ def connexion_server():
 
                 msg_recv = msg_recv.decode()
 
+                process_server(msg_recv)
+
                 print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p', str(PORT),
                       '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
 
                 if msg_recv == "/disconnexion":
                     server_ready = False
 
-                p_server = process_server(msg_recv)
+                ###############################################
+
+                d_l = dict_log()
+
+                c2c = str_log(d_l)
+
+                p_server = c2c
+
+                ###############################################
 
                 byte_data = p_server.encode()
 
                 client.sendall(byte_data)
 
-########################################################################################################################
+    ########################################################################################################################
 
     print("Close all connections")
     for client in client_connected:
