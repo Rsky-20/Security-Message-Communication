@@ -101,7 +101,18 @@ def dechiffrementAffine(a, b, L):
 def crypt(M, a, b):
     """
     we finally use our functions, we enter the word (M), we enter our values
-    of the couple a and b, which corresponds to our encryption key
+    of the couple a and b, which corresponds to our encryption key.
+    each character entered will match another character, making it impossible to read.
+    A character will therefore have two matches, the first is its true value, and the second is false.
+    here, it is a question of transforming the true into false.
+    
+    Arguments : 
+        arg(1) : M -> it is a string
+        arg(2) : a -> it is an Int
+        arg(3) : b -> it is an Int
+        
+    return : -> it is a string, is a succession of characters
+    
     """
     if pgcd(a, 97) == 1:
         mot = []
@@ -113,6 +124,20 @@ def crypt(M, a, b):
 
 
 def decrypt(M, a, b):
+    """
+    we finally use our functions, we enter the word (M), we enter our values
+    of the couple a and b, which corresponds to our encryption key.
+    each character entered will match another character, making it impossible to read.
+    A character will therefore have two matches, the first is its true value, and the second is false.
+    here, it is a question of transforming the false into true. 
+    
+    Arguments : 
+        arg(1) : M -> it is a string
+        arg(2) : a -> it is an Int
+        arg(3) : b -> it is an Int
+        
+    return : -> it is a string, is a succession of characters
+    """
     if pgcd(a, 97) == 1:
         mot = []
         for i in range(0, len(M)):
