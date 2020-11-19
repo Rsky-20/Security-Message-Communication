@@ -63,6 +63,7 @@ def inverse(a):
     """
     calculating the inverse of the number of characters, 
     we do this to be able to find our departure when we arrive.
+    this part will be used to decrypt the message received.
     
     Arguments : a -> it is an Int
     
