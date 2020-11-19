@@ -24,7 +24,8 @@ client_connected = []
 
 # data_server is a dict. It's use to make a count of client
 data_server = {
-    'turn': 0
+    'HOST': '127.0.0.1',
+    'PORT': 50100
 }
 """
 client envoie une requette start, ensuite le server récup la requet, il regarde puis il lu donne un nombbre
@@ -55,7 +56,7 @@ def log(data):
     log is a process to make a history file of all conversation between client in the server.
     He use a str value given by client and save it in a texte file.
 
-    Arguments:
+    Arguments
         arg1: data => str value given by client to the server
 
     Return:
@@ -73,7 +74,7 @@ def log_connection(client_connected):
     log_connection is a process to make a history file of all connection client in the server.
     He use a type value given by module socket and save it in a texte file..
 
-        Arguments:
+        Arguments
             arg1: client_connected => type value given by socket module
 
         Retourne:
@@ -95,7 +96,7 @@ def process_server(data):
     It's a part of server to use client data.
     He use a str value given by client and use it in process.
 
-        Arguments:
+        Arguments
             arg1: data => str value given by client in main bool of server in the part where data are receive
 
         Return:
@@ -116,7 +117,7 @@ def dict_log():
     He open and take all data in log.txt.
     He take all ligne and append in output list named dlog
 
-        Arguments:
+        Arguments
             arg1: none
 
         Return:
@@ -125,14 +126,14 @@ def dict_log():
     """
 
     # Open file text as lg and create a list named dlog.
-    # for line in lg, in variable named l, make a str variable named s and split the line with separator '@'
+    # for line in lg, in variable named lastL, make a str variable named s and split the line with separator '@'
     # After append variable l in list dlog and close
     with open('log.txt', 'r') as lg:
         dlog = []
         for line in lg:
             s = line.strip("\n")
-            l = s.split("@")
-            dlog.append(l)
+            lastL = s.split("@")
+            dlog.append(lastL)
         lg.close()
 
     return dlog
@@ -144,8 +145,8 @@ def str_log(data):
     He split element of list and join all element to make a str data.
     But only the last line is returned and use
 
-        Arguments:
-            arg1: client_connected => type value given by socket module
+        Arguments
+            arg1: data => list of all data exchange between client2server and server2client
 
         Return:
             resturn str_l contain str data of the last element of the list given in argument
@@ -161,6 +162,14 @@ def str_log(data):
 
     return str_l
 
+def consoleCommand(event):
+    if event == '/log.txt':
+        log = open("./log.txt", "r")
+        contenu = log.read()
+        print(contenu)
+    else:
+        exit()
+
 
 def connection_server():
     """
@@ -175,7 +184,7 @@ def connection_server():
     AF_INET represents the IPv4 address family.
     SOCK_STREAM represents the TCP protocol.
 
-        Arguments:
+        Arguments
             arg1: none
 
         Return:
@@ -184,21 +193,22 @@ def connection_server():
     """
 
     # Creating a socket, by creating a socket object named s.
-    # with allows the connector to be closed after use and in the event of an error.
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Allows to reuse the same address
-        # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # Allows to reuse the same address
+    # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        # s.bind (address) binds an address and a port to socket s.
-        # The address parameter is a tuple consisting of the IP address of the
-        # server and a port number.
-        s.bind((HOST, PORT))
+    # s.bind (address,port) binds an address and a port to socket s.
+    # The address parameter is a tuple consisting of the IP address of the
+    # server and a port number.
+    # s.bind((data_server['HOST'], data_server['PORT']))
+    s.bind((HOST, PORT))
 
-        # s.listen () makes the server ready to accept connections.
-        s.listen(5)
-        print('{serverver-status}:', '\033[32m', 'Online', '\033[1m')
-        print(s)
+
+    # s.listen () makes the server ready to accept connections.
+    s.listen(5)
+    print('{serverver-status}:', '\033[32m', 'Online', '\033[1m')
+    print(s)
 
     # Variable that starts the while loop
     server_ready = True
@@ -219,7 +229,7 @@ def connection_server():
             print(connection_client)
             log_connection(connection_client)
 
-        ########################################################################################################################
+    ####################################################################################################################
 
         # Create a empty list read_client
         read_client = []
@@ -243,9 +253,9 @@ def connection_server():
                 print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p ', str(PORT),
                       '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
 
-                #                if msg_recv == "Qj-oK":
-                #                    server_ready = False
-                #                    break
+                if msg_recv == "Qj-oK":
+                    server_ready = False
+                    break
 
                 ###############################################
                 # Function or process to open last message and convert him
@@ -263,8 +273,9 @@ def connection_server():
                 # send message to the client
                 client.sendall(byte_data)
 
-    ########################################################################################################################
-
+    ####################################################################################################################
+    console = input("[" + datetime.datetime.isoformat(datetime.datetime.now()) + "]>")
+    consoleCommand(console)
     print("Close all connections")
     # For client in client_connected, disconnect all client
     for client in client_connected:
@@ -278,7 +289,7 @@ def run():
     """
     Run process
 
-        Arguments:
+        Arguments
             arg1: none
 
         Return:
@@ -290,6 +301,7 @@ def run():
 
     while True:
         connection_server()
+
 
 # Give basic and native documentation in console
 documentation()
