@@ -24,6 +24,12 @@ def str2dict(data):
 def pgcd(a, b):
     """
     calculate the greatest common divisor of a and b
+    
+    Arguments:
+        arg(1) : a -> it is an Int
+        arg(2) : b -> it is an Int 
+    
+    return : a -> it is an Int 
     """
     while b != 0:
         a, b = b, a % b
@@ -34,6 +40,13 @@ def chiffrementAffine(a, b, L):
     """
     create a list with all the characters that can be used, 
     modulo 97 because in all, there are 97 characters.
+    
+    Arguments :
+        arg(1) : a -> it is an Int
+        arg(2) : b -> it is an Int
+        arg(3) : L -> it is a character (97 possibilities)
+        
+    return : data[y] -> it is one of the 97 defined characters
     """
     data = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'w',
             'x', 'c', 'v', 'b', 'n', 'A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'Q', 'S', 'D', 'F', 'G', 'H',
@@ -49,7 +62,11 @@ def chiffrementAffine(a, b, L):
 def inverse(a):
     """
     calculating the inverse of the number of characters, 
-    we do this to be able to find our departure when we arrive
+    we do this to be able to find our departure when we arrive.
+    
+    Arguments : a -> it is an Int
+    
+    return : x -> it is an Int
     """
     x = 0
     while a * x % 97 != 1:
@@ -57,12 +74,18 @@ def inverse(a):
     return x
 
 
-# Fonction de déchiffrement
 def dechiffrementAffine(a, b, L):
     """
     create a list with all the characters that can be used, 
     modulo 97 because in all, there are 97 characters.
     to decipher we use the inverse calculate just before.
+    
+    Arguments :
+        arg(1) : a -> it is an Int
+        arg(2) : b -> it is an Int
+        arg(3) : L -> it is a character (97 possibilities)
+        
+    return : data[y] -> it is one of the 97 defined characters
     
     """
     data = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'w',
@@ -74,7 +97,7 @@ def dechiffrementAffine(a, b, L):
     y = (inverse(a) * (x - b)) % 97
     return data[y]
 
-# Affichage du mot chiffré
+
 def crypt(M, a, b):
     """
     we finally use our functions, we enter the word (M), we enter our values
@@ -89,7 +112,6 @@ def crypt(M, a, b):
         return "Chiffrement impossible. Veuillez choisir un nombre ( a ) premier avec 97."
 
 
-# Affichage du mot déchiffré
 def decrypt(M, a, b):
     if pgcd(a, 97) == 1:
         mot = []
