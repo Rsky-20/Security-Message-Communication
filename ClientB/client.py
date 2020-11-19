@@ -91,20 +91,20 @@ def process_response(data,data2):
         print('')
 
 
-def connexion_server(HOST, PORT):
+def connection_client(HOST, PORT):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.connect((HOST, PORT))
     #s.listen(10)
 
-    print("Connexion établie avec le serveur sur le port {}".format(PORT))
+    print("connection établie avec le serveur sur le port {}".format(PORT))
     client_info = '[' + 'CLIENT ' + s.getsockname()[0] + ':' + '' + str(s.getsockname()[1]) + "]"
     print('\033[31m' + 'CLIENT  ' + '\033[36m' + s.getsockname()[0] + ':' + '\033[33m' + str(s.getsockname()[1]))
     print('\033[31m' + 'SERVER  ' + '\033[36m' + HOST + ':' + '\033[33m' + str(PORT))
 
 
     send_msg = b""
-    while send_msg != b"/disconnection":
+    while send_msg != b"/stop":
         send_msg = crypt(input("> "), 35,19)
         send_msg = datetime.datetime.isoformat(datetime.datetime.now()) + '|'+ client_info + "@" + send_msg
 
@@ -127,7 +127,7 @@ def connexion_server(HOST, PORT):
 
 
 def run():
-    connexion_server(HOST, PORT)
+    connection_client(HOST, PORT)
 
 
 run()

@@ -114,3 +114,31 @@ def run():
         connexion()
 
 run()
+
+for client in client_connected:
+    msg_recv = client.recv(1024)
+
+    msg_recv = msg_recv.decode()
+
+    if msg_recv == "/disconnexion":
+        server_ready = False
+
+    else:
+        process_server(msg_recv)
+
+    print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p ', str(PORT),
+          '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
+
+    ###############################################
+
+    d_l = dict_log()
+
+    c2c = str_log(d_l)
+
+    p_server = c2c
+
+    ###############################################
+
+    byte_data = p_server.encode()
+
+    client.sendall(byte_data)

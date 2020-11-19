@@ -1,0 +1,2 @@
+2020-11-19T15:30:49.601693> <socket.socket fd=348, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50100), raddr=('127.0.0.1', 58308)> connected on server
+2020-11-19T15:30:51.103004> <socket.socket fd=360, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50100), raddr=('127.0.0.1', 58309)> connected on server 
