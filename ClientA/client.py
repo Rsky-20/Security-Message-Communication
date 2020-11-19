@@ -21,6 +21,7 @@ def str2dict(data):
     str_msg = data.split(',')
     return str_msg
 
+
 def pgcd(a, b):
     """
     calculate the greatest common divisor of a and b
