@@ -21,15 +21,20 @@ def str2dict(data):
     str_msg = data.split(',')
     return str_msg
 
-
 def pgcd(a, b):
+    """
+    calculate the greatest common divisor of a and b
+    """
     while b != 0:
         a, b = b, a % b
     return a
 
 
-# fonction de chiffrement affine
 def chiffrementAffine(a, b, L):
+    """
+    create a list with all the characters that can be used, 
+    modulo 97 because in all, there are 97 characters.
+    """
     data = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'w',
             'x', 'c', 'v', 'b', 'n', 'A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'Q', 'S', 'D', 'F', 'G', 'H',
             'J', 'K', 'L', 'M', 'W', 'X', 'C', 'V', 'B', 'N', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-',
@@ -40,8 +45,12 @@ def chiffrementAffine(a, b, L):
     return data[y]
 
 
-# Calcul de l'inverse d'un nombre modulo 97
+
 def inverse(a):
+    """
+    calculating the inverse of the number of characters, 
+    we do this to be able to find our departure when we arrive
+    """
     x = 0
     while a * x % 97 != 1:
         x = x + 1
@@ -50,6 +59,12 @@ def inverse(a):
 
 # Fonction de déchiffrement
 def dechiffrementAffine(a, b, L):
+    """
+    create a list with all the characters that can be used, 
+    modulo 97 because in all, there are 97 characters.
+    to decipher we use the inverse calculate just before.
+    
+    """
     data = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'w',
             'x', 'c', 'v', 'b', 'n', 'A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'Q', 'S', 'D', 'F', 'G', 'H',
             'J', 'K', 'L', 'M', 'W', 'X', 'C', 'V', 'B', 'N', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-',
@@ -59,8 +74,12 @@ def dechiffrementAffine(a, b, L):
     y = (inverse(a) * (x - b)) % 97
     return data[y]
 
-
+# Affichage du mot chiffré
 def crypt(M, a, b):
+    """
+    we finally use our functions, we enter the word (M), we enter our values
+    of the couple a and b, which corresponds to our encryption key
+    """
     if pgcd(a, 97) == 1:
         mot = []
         for i in range(0, len(M)):
