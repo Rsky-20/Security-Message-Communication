@@ -7,10 +7,16 @@ import os
 
 HOST = "127.0.0.1"
 
+# request = 'start1'
+# """
+
+# """
+
 PORT = 50100
 
-fid_client = '#jhd62j2hkzp' #input("Give your Friend Id_client (like => #jhd62j2hkzp: ")
+fid_client = '#jhd62j2hkzp'
 id_client = '#8hd27dh1js2'
+
 
 def str2dict(data):
     str_msg = data.split(',')
@@ -76,7 +82,7 @@ def decrypt(M, a, b):
         return "Déchiffrement impossible. Le nombre a n'est pas premier avec 97"
 
 
-def process_response(data,data2):
+def process_response(data, data2):
     str_l = data
 
     client_data = str_l.split('|')
@@ -93,37 +99,46 @@ def process_response(data,data2):
 
 def connection_client(HOST, PORT):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.connect((HOST, PORT))
-    #s.listen(10)
+    # s.listen(10)
 
     print("connection établie avec le serveur sur le port {}".format(PORT))
     client_info = '[' + 'CLIENT ' + s.getsockname()[0] + ':' + '' + str(s.getsockname()[1]) + "]"
     print('\033[31m' + 'CLIENT  ' + '\033[36m' + s.getsockname()[0] + ':' + '\033[33m' + str(s.getsockname()[1]))
     print('\033[31m' + 'SERVER  ' + '\033[36m' + HOST + ':' + '\033[33m' + str(PORT))
 
+    # sending_msg = "start"
+    # s.sendall(sending_msg)
 
     send_msg = b""
     while send_msg != b"/stop":
-        send_msg = crypt(input("> "), 35,19)
-        send_msg = datetime.datetime.isoformat(datetime.datetime.now()) + '|'+ client_info + "@" + send_msg
+        msg = input("> ")
+        send_msg = crypt(msg, 35, 19)
+        if msg == '/stop':
+            send_msg = b"/stop"
+        else:
+            send_msg = datetime.datetime.isoformat(datetime.datetime.now()) + '|' + client_info + "@" + send_msg
 
-        sending_msg = send_msg.encode()
-        s.sendall(sending_msg)
+            sending_msg = send_msg.encode()
+            s.sendall(sending_msg)
 
-        msg_recv = s.recv(1024)
+            msg_recv = s.recv(1024)
 
-        response = msg_recv.decode()
-        #print(response)
+            response = msg_recv.decode()
+            # print(response)
 
-        #######################################################################
+            #######################################################################
 
-        process_response(response, client_info)
+            process_response(response, client_info)
 
-        #######################################################################
+            #######################################################################
+
 
     print("Close all connection")
-    s.close()
+    send_stop = '/stop'
+    sending_stop = send_stop.encode()
+    s.sendall(sending_stop)
 
 
 def run():
