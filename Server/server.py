@@ -370,7 +370,7 @@ def run():
     Run process
 
         Arguments
-            arg1: none
+            arg: none
 
         Return:
             resturn self

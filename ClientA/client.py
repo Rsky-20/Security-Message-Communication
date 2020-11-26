@@ -243,6 +243,9 @@ def decrypt(M, a, b):
 
 
 def process_response(data, data2, messager):
+    """
+
+    """
 
     str_l = data
     client_ = str_l.split('|')
@@ -315,6 +318,16 @@ def connection_client(HOST, PORT):
 
 
 def run():
+    """
+        Run process
+
+            Arguments
+                arg: none
+
+            Return:
+                resturn self
+
+    """
 
     connection_client(HOST, PORT)
 

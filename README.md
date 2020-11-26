@@ -134,6 +134,9 @@ Exemple concrêt des requêtes :
     
     Voilà ! George et Jacque communiquent ensemble.
     
+### Schéma Requête
+![Logo](https://drive.google.com/u/0/uc?id=1R4cPoFPLW0rEQL7jQ7qNs6pqlG9m9eQE&export=download)
+
 
     
 
