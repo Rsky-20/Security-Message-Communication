@@ -1,16 +1,54 @@
 """
+[Description]
 
-Description
+    SMC is a security message communication.
+    This program is the part of server program.
+    The server uses the socket module to work.
+    To improve communication between the client and the server, we use the select module to select a specific socket.
+    The datetime, os and platform modules are used to make the server fully functional. These modules are used to date
+    operations, and to clean the console if necessary depending on the platform used.
+
+[Functions]:
+
+    Clean() -- clear console
+    documentation() -- make native documentation and basic screen interface
+    log() -- log all data receive on server
+    log_connection() -- log all connection make with server
+    process_server() -- interprets the data received and exploits it
+    list_log() -- conversion of data inside text file to list
+    str_log(data) -- conversion of a list to str
+    consoleCommand() -- make a native console after communication to see log.txt
+    connection_server() -- main process of the server
+    run() -- run and launch server
+
+[Global variable]:
+    {int variable}
+        PORT
+    {str variable}
+        HOST
+        affichage_logo
+    {dict variable}
+        server_data
+    {list variable}
+        client_connected
+
+[Other variable]:
+
+    Many other constants and variable may be defined; these may be used in calls to
+    the process_server(), list_log(), str_log(data), consoleCommand() and connection_server() functions
+
 
 """
 
-# -------------------------------------------------Import module section---------------------------------------------- #
+# ------------------------------------------------Import module section----------------------------------------------- #
 
 import datetime
 import select
 import socket
+import os
+import platform
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ----------------------------------------------------Server data----------------------------------------------------- #
 
 # Definition of local server variable
 # Host is local adress for binding the server
@@ -23,31 +61,65 @@ PORT = 50100
 client_connected = []
 
 # data_server is a dict. It's use to make a count of client
-data_server = {
-    'HOST': '127.0.0.1',
-    'PORT': 50100
+server_data = {
+    'count': 0
 }
-"""
-client envoie une requette start, ensuite le server récup la requet, il regarde puis il lu donne un nombbre
-Le serveur renvoie le num 1
-Quand le deuxieme client envoie start => le serveur renvoie le num 2
-==> position / identifiant
 
-variable turn
-
-count = 0
-"""
+# --------------------------------------------------Functions & process----------------------------------------------- #
+def Clean():
+    if platform.system() == "Windows":
+        os.system("cls")
+    elif platform.system() == "Linux":
+        os.system("clear")
 
 
 def documentation():
     """
-    This process return a native and basic documentation to the administrator of the serverS
+    This process return a native and basic documentation to the administrator of the serverS with a great ascii art
+    screen
 
     """
 
-    print('#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#')
-    print('#                   Welcome in SMC server                      #')
-    print('#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#')
+    affichage_logo = '\033[36m' + """
+    ___                       _ _           __  __                                   _____                                      _           _   _             
+  / ____|                    (_) |         |  \/  |                                 / ____|                                    (_)         | | (_)            
+ | (___   ___  ___ _   _ _ __ _| |_ _   _  | \  / | ___  ___ ___  __ _  __ _  ___  | |     ___  _ __ ___  _ __ ___  _   _ _ __  _  ___ __ _| |_ _  ___  _ __  
+  \___ \ / _ \/ __| | | | '__| | __| | | | | |\/| |/ _ \/ __/ __|/ _` |/ _` |/ _ \ | |    / _ \| '_ ` _ \| '_ ` _ \| | | | '_ \| |/ __/ _` | __| |/ _ \| '_ \ 
+  ____) |  __/ (__| |_| | |  | | |_| |_| | | |  | |  __/\__ \__ \ (_| | (_| |  __/ | |___| (_) | | | | | | | | | | | |_| | | | | | (_| (_| | |_| | (_) | | | |
+ |_____/ \___|\___|\__,_|_|  |_|\__|\__, | |_|  |_|\___||___/___/\__,_|\__, |\___|  \_____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|_|\___\__,_|\__|_|\___/|_| |_|
+                                     __/ |                              __/ |                                                                                 
+                                    |___/                              |___/                                                                                                                                
+                                                                                                                                                                                                                                                                          
+                                                                                      /%&@@@@@&%/                           
+                                                                               @@@@@@@@&&(((((&&@@@@@@@@.                   
+                                                                           @@@@@,,,,,,,,,,,,,,,,,,,,,,,@@@@@                
+                                                                        @@@@,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,@@@@             
+                                                                      &@@@,,,,,,,,,,,,,,%@*,,%/%@%***@,,,,,,,&@@&           
+                                                                     @@@(@@@@@@@@@@@*,,,,*,,,,,,,,,,,,,,,,,,,,,@@@          
+                                                                 &@@@@@@@&,,,.....%@@@@@@@@*,,,,,,,,,,,,,,,,,,,,@@@         
+                                                             (@@@@&(#((***,,,,....,.......@@@@@,,,,,,,,,,,,,,,,,@@@         
+                                                           @@@@*,#*((/(/(/,,,,,,,,...,....   ,@@@&,,,,,,,,,,,,,,@@@         
+                                                         @@@,,/,,(*,/%/(((*,,,,.,....,.,..  ,..,@@@%,,,,,,,,,,,&@@          
+                                                        @@@./.  ..*(((/#//***,*,,,,*,,*.. ..,, .  @@@,,,,,,,,,@@@           
+                                                       @@@#,/**..*@@@#(//***#@@&,*,.,,.&@@#. ,,.. .@@%,,,,,,@@@#            
+                                                       @@(*%(,,/@@@(@@@%/*#@@@/@@@**.@@@/&@@(.. .  @@@,,/@@@@               
+                                                       @@@#.,(/,@@@@@@@(..*@@@@@@@(..@@@@@@@       @@@@@@@                  
+                                                       ,@@(/((*#**#/(/,  .*, ..&*////(,,          @@@                       
+                                                         @@@  */*(/*/. ..... . ...  /*(.,.,,    .@@@                        
+                                                          %@@@. . . ..,  .,   . .     *,**.*, #@@@                          
+                                                             @@@@(.   ..,  ,.          ,.   .@@@                            
+                                                                %@@@@@@(,.. ,. .. . .&@@@ ,  &@@                            
+                                                                      %@@@@@@@@@@@@@@@* @@@. (@@                            
+                                                                                          @@@.@@.                           
+                                                                                            @@@@.                           
+                                                                                              @@.                           
+
+    """ + '\033[39m'
+    print(affichage_logo)
+    print('\t\t\t\t\t\t\t\t\t\t\t\t#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#')
+    print('\t\t\t\t\t\t\t\t\t\t\t\t#                   ' + '\033[31m' + 'Welcome in SMC server' + '\033[39m' +
+          '                      #')
+    print('\t\t\t\t\t\t\t\t\t\t\t\t#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#')
     print('Reste de la doc à venir °°°')
 
 
@@ -107,13 +179,17 @@ def process_server(data):
 
     # Rename data as response and use it in log process
     response = data
-    log(response)
+
+    if response != '/stop':
+        log(response)
+    else:
+        pass
     return response
 
 
-def dict_log():
+def list_log():
     """
-    dict_log is a function to change text file to list.
+    list_log() is a function to change text file to list.
     He open and take all data in log.txt.
     He take all ligne and append in output list named dlog
 
@@ -121,7 +197,7 @@ def dict_log():
             arg1: none
 
         Return:
-            resturn dlog list created to use data in file txt
+            resturn llog list created to use data in file txt
 
     """
 
@@ -129,14 +205,14 @@ def dict_log():
     # for line in lg, in variable named lastL, make a str variable named s and split the line with separator '@'
     # After append variable l in list dlog and close
     with open('log.txt', 'r') as lg:
-        dlog = []
+        llog = []
         for line in lg:
             s = line.strip("\n")
             lastL = s.split("@")
-            dlog.append(lastL)
+            llog.append(lastL)
         lg.close()
 
-    return dlog
+    return llog
 
 
 def str_log(data):
@@ -212,6 +288,7 @@ def connection_server():
 
     # Variable that starts the while loop
     server_ready = True
+    turn = server_data['count']
 
     while server_ready:
 
@@ -226,8 +303,10 @@ def connection_server():
         for connection in wait_connections:
             connection_client, info_connection = connection.accept()
             client_connected.append(connection_client)
-            print(connection_client)
+            print("Prosition : ", turn , " | Client : ", connection_client)
+            turn = turn + 1
             log_connection(connection_client)
+
 
     ####################################################################################################################
 
@@ -250,16 +329,16 @@ def connection_server():
 
                 process_server(msg_recv)
 
-                print('[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p ', str(PORT),
+                print('\033[39m', '[', '\033[31m', 'SERVER@', '\033[36m', HOST, '\033[33m', '-p ', str(PORT),
                       '\033[39m', ']: Client send a message. Go to ./log.txt to see more.')
 
-                if msg_recv == "Qj-oK":
+                if msg_recv == "/stop":
                     server_ready = False
                     break
 
                 ###############################################
                 # Function or process to open last message and convert him
-                d_l = dict_log()
+                d_l = list_log()
 
                 c2c = str_log(d_l)
 
@@ -274,8 +353,8 @@ def connection_server():
                 client.sendall(byte_data)
 
     ####################################################################################################################
-    console = input("[" + datetime.datetime.isoformat(datetime.datetime.now()) + "]>")
-    consoleCommand(console)
+    #console = input("[" + datetime.datetime.isoformat(datetime.datetime.now()) + "](/log.txt to see log in server)>")
+    #consoleCommand(console) # This line, give to the administrator the console to oppen and see log
     print("Close all connections")
     # For client in client_connected, disconnect all client
     for client in client_connected:
@@ -283,6 +362,7 @@ def connection_server():
 
     # close the server after executing while bool
     s.close()
+    Clean()
 
 
 def run():
@@ -290,7 +370,7 @@ def run():
     Run process
 
         Arguments
-            arg1: none
+            arg: none
 
         Return:
             resturn self
@@ -302,9 +382,12 @@ def run():
     while True:
         connection_server()
 
+# -----------------------------------------------Run & Start server program------------------------------------------- #
 
-# Give basic and native documentation in console
-documentation()
+if __name__ == '__main__':
 
-# Run the program
-run()
+    # Give basic and native documentation in console
+    documentation()
+
+    # Run the program
+    run()
