@@ -12,7 +12,7 @@
     lancé votre IDLE ou autre programme similaire permettant d'ouvrir et lancé python.
     Python 3.5 ou supérieur est nécessaire pour le bon fonctionnement du projet
     
-    > sur console cmd ou PowerShell : 
+    > sur console cmd ou PowerShell (ou IDLE): 
     
         --> console 1 (console serveur):
             PS C:\WINDOWS\system32> cd /le/chemin/de/votre/server
@@ -31,7 +31,7 @@
         
                                                         _________________________________________________
      
-    > sur Pycharm ou IDLE :
+    > sur Pycharm :
         Executé les fichier python dans l'ordre suivant:
             > serveur.py --> client A --> client B
         
@@ -62,17 +62,18 @@ Pour plus d'information sur le code, merci de bien vouloir lire la documentation
 
 ### Partie Requête 
 
-> Notre projet comporte deux type de requêtes formant la communication ou canal.
-    Requête 1 : la requête envoyé par le client au serveur. A ce moment là le client envoie le message déjà chiffré 
+> Notre projet comporte deux types de interactions formant la communication ou canal.
+    Interaction 1 : la requête envoyée par le client au serveur. A ce moment-là le client envoie le message déjà chiffré 
     au serveur et le serveur reçoit 
-    Requête 2 : La requête 'Réponse' est l'envoie des données contenues et stockés par le serveur vers le client
+    Interaction 2 : La requête 'Réponse' est l'envoie des données contenues et stockés par le serveur vers le client
 
-Il y'a bien 2 requêtes pour une communication entre client/serveur.
-Donc afin de communiquer, le shéma de communication se répète. Un client envoie puis reçoit et attend de pouvoir 
-re-communiquer avec le serveur une fois qu'il sera disposé à communiquer (une fois que l'autre client aura finit sa 
+Il y'a bien 2 interaction pour une communication entre client/serveur.
+Donc afin de communiquer, le schéma de communication se répète. Un client envoie puis reçoit et attend de pouvoir 
+recommuniquer avec le serveur une fois qu'il sera disposé à communiquer (une fois que l'autre client aura fini sa 
 communication avec le serveur).
 
-Exemple des requêtes de façon générale  :
+
+Exemple des interactions de façon générale  :
     
     Démarrage Serveur
     Démarrage Client A puis connexion
