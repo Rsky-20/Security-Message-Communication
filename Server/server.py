@@ -1,4 +1,14 @@
+#!/bin/python3 -*- coding: utf-8 -*-
 """
+@Author : Jessy JOSE -- Pierre VAUDRY
+IPSA Aero1 - Prim2
+Release date: 09/12/2020
+
+
+[other information]
+Licence: MIT
+
+
 [Description]
 
     SMC is a security message communication.
@@ -7,6 +17,7 @@
     To improve communication between the client and the server, we use the select module to select a specific socket.
     The datetime, os and platform modules are used to make the server fully functional. These modules are used to date
     operations, and to clean the console if necessary depending on the platform used.
+
 
 [Functions]:
 
@@ -21,26 +32,30 @@
     connection_server() -- main process of the server
     run() -- run and launch server
 
+
 [Global variable]:
     {int variable}
         PORT
+
     {str variable}
         HOST
         affichage_logo
+
     {dict variable}
         server_data
+
     {list variable}
         client_connected
+
 
 [Other variable]:
 
     Many other constants and variable may be defined; these may be used in calls to
     the process_server(), list_log(), str_log(data), consoleCommand() and connection_server() functions
 
-
 """
 
-# ------------------------------------------------Import module section----------------------------------------------- #
+# ---------------------------------------------Import module section-------------------------------------------------- #
 
 import datetime
 import select
@@ -48,9 +63,9 @@ import socket
 import os
 import platform
 
-# ----------------------------------------------------Server data----------------------------------------------------- #
-
+# ------------------------------------------------Global variable----------------------------------------------------- #
 # Definition of local server variable
+
 # Host is local adress for binding the server
 HOST = '127.0.0.1'
 
@@ -60,13 +75,21 @@ PORT = 50100
 # Initialisation of list to make a stockage of connected client on the server
 client_connected = []
 
-# data_server is a dict. It's use to make a count of client
+# server_data is a dict. It's use to make a count of client
 server_data = {
     'count': 0
 }
 
-# --------------------------------------------------Functions & process----------------------------------------------- #
+# ------------------------------------------------Functions & process------------------------------------------------- #
+
+
 def Clean():
+    """
+    [description]
+    clean is a process to clean main console
+
+    :return: none
+    """
     if platform.system() == "Windows":
         os.system("cls")
     elif platform.system() == "Linux":
@@ -75,9 +98,11 @@ def Clean():
 
 def documentation():
     """
+    [Description]
     This process return a native and basic documentation to the administrator of the serverS with a great ascii art
     screen
 
+    :return: none
     """
 
     affichage_logo = '\033[36m' + """
@@ -125,16 +150,14 @@ def documentation():
 
 def log(data):
     """
+    [description]
     log is a process to make a history file of all conversation between client in the server.
     He use a str value given by client and save it in a texte file.
 
-    Arguments
-        arg1: data => str value given by client to the server
-
-    Return:
-        resturn none because it's a process
-
+    :param data: str value given by client to the server
+    :return: none
     """
+
     # Open file text as lmsg and write data with return line, after close the file in use
     with open("log.txt", "a") as lmsg:
         lmsg.write(data + "\n")
@@ -143,15 +166,13 @@ def log(data):
 
 def log_connection(client_connected):
     """
+    [description]
     log_connection is a process to make a history file of all connection client in the server.
     He use a type value given by module socket and save it in a texte file..
 
-        Arguments
-            arg1: client_connected => type value given by socket module
 
-        Retourne:
-            resturn none because it's a process
-
+    :param client_connected: type value given by socket module
+    :return: none
     """
 
     # Open file text as lc and write in file the date time of server, the client information in str
@@ -164,17 +185,14 @@ def log_connection(client_connected):
 
 def process_server(data):
     """
+    [description]
     process_server is a function that processes data given by client.
     It's a part of server to use client data.
     He use a str value given by client and use it in process.
 
-        Arguments
-            arg1: data => str value given by client in main bool of server in the part where data are receive
-
-        Return:
-            resturn response a str but this variable is not use in the rest of program (because we have not make yet a
-            functionnaly than use this var)
-
+    :param data: str value given by client in main bool of server in the part where data are receive
+    :return: response a str but this variable is not use in the rest of program (because we have not make yet a
+    functionnaly than use this var)
     """
 
     # Rename data as response and use it in log process
@@ -189,16 +207,12 @@ def process_server(data):
 
 def list_log():
     """
+    [description]
     list_log() is a function to change text file to list.
     He open and take all data in log.txt.
     He take all ligne and append in output list named dlog
 
-        Arguments
-            arg1: none
-
-        Return:
-            resturn llog list created to use data in file txt
-
+    :return: llog list created to use data in file txt
     """
 
     # Open file text as lg and create a list named dlog.
@@ -217,16 +231,13 @@ def list_log():
 
 def str_log(data):
     """
+    [description]
     str_log is a function to change a list to str data.
     He split element of list and join all element to make a str data.
     But only the last line is returned and use
 
-        Arguments
-            arg1: data => list of all data exchange between client2server and server2client
-
-        Return:
-            resturn str_l contain str data of the last element of the list given in argument
-
+    :param data: list of all data exchange between client2server and server2client
+    :return: list of all data exchange between client2server and server2client
     """
 
     # Create a empty local variable named str_l
@@ -238,7 +249,14 @@ def str_log(data):
 
     return str_l
 
+
 def consoleCommand(event):
+    """
+    [description]
+
+    :param event:
+    :return:
+    """
     if event == '/log.txt':
         log = open("./log.txt", "r")
         contenu = log.read()
@@ -247,8 +265,11 @@ def consoleCommand(event):
         exit()
 
 
+# This process is named connection_server because client connextion's are logged and used by server.
+# connection_server is a inspired of send() process but the code is not the same.
 def connection_server():
     """
+    [description]
     connection_server is a main process in the server program.
     He use socket module to create a server.
     It's the main part of server.
@@ -260,12 +281,8 @@ def connection_server():
     AF_INET represents the IPv4 address family.
     SOCK_STREAM represents the TCP protocol.
 
-        Arguments
-            arg1: none
 
-        Return:
-            resturn self
-
+    :return: none
     """
 
     # Creating a socket, by creating a socket object named s.
@@ -279,7 +296,6 @@ def connection_server():
     # server and a port number.
     # s.bind((data_server['HOST'], data_server['PORT']))
     s.bind((HOST, PORT))
-
 
     # s.listen () makes the server ready to accept connections.
     s.listen(5)
@@ -306,7 +322,6 @@ def connection_server():
             print("Prosition : ", turn , " | Client : ", connection_client)
             turn = turn + 1
             log_connection(connection_client)
-
 
     ####################################################################################################################
 
@@ -353,6 +368,7 @@ def connection_server():
                 client.sendall(byte_data)
 
     ####################################################################################################################
+
     #console = input("[" + datetime.datetime.isoformat(datetime.datetime.now()) + "](/log.txt to see log in server)>")
     #consoleCommand(console) # This line, give to the administrator the console to oppen and see log
     print("Close all connections")
@@ -367,14 +383,10 @@ def connection_server():
 
 def run():
     """
+    [description]
     Run process
 
-        Arguments
-            arg: none
-
-        Return:
-            resturn self
-
+    :return: none
     """
 
     print('[' + '\033[31m' + 'SERVER@' + '\033[36m' + HOST + ' ' + '\033[33m' + '-p ' + str(PORT) + '\033[39m' + ']:\n')
@@ -382,7 +394,9 @@ def run():
     while True:
         connection_server()
 
-# -----------------------------------------------Run & Start server program------------------------------------------- #
+
+# -------------------------------------------Run & Start server program----------------------------------------------- #
+
 
 if __name__ == '__main__':
 
