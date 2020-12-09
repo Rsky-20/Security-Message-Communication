@@ -183,6 +183,42 @@ def log_connection(client_connected):
         lc.close()
 
 
+def str_log(data):
+    """
+    [description]
+    str_log is a function to change a list to str data.
+    He split element of list and join all element to make a str data.
+    But only the last line is returned and use
+
+    :param data: list of all data exchange between client2server and server2client
+    :return: list of all data exchange between client2server and server2client
+    """
+
+    # Create a empty local variable named str_l
+    # for i in the range of len data, for j in range of len of all data element, join the last element in variable str_l
+    str_l = ''
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            str_l = ','.join(data[i - 1])
+
+    return str_l
+
+
+def consoleCommand(event):
+    """
+    [description]
+
+    :param event:
+    :return:
+    """
+    if event == '/log.txt':
+        log = open("./log.txt", "r")
+        contenu = log.read()
+        print(contenu)
+    else:
+        exit()
+
+
 def process_server(data):
     """
     [description]
@@ -227,42 +263,6 @@ def list_log():
         lg.close()
 
     return llog
-
-
-def str_log(data):
-    """
-    [description]
-    str_log is a function to change a list to str data.
-    He split element of list and join all element to make a str data.
-    But only the last line is returned and use
-
-    :param data: list of all data exchange between client2server and server2client
-    :return: list of all data exchange between client2server and server2client
-    """
-
-    # Create a empty local variable named str_l
-    # for i in the range of len data, for j in range of len of all data element, join the last element in variable str_l
-    str_l = ''
-    for i in range(len(data)):
-        for j in range(len(data[i])):
-            str_l = ','.join(data[i - 1])
-
-    return str_l
-
-
-def consoleCommand(event):
-    """
-    [description]
-
-    :param event:
-    :return:
-    """
-    if event == '/log.txt':
-        log = open("./log.txt", "r")
-        contenu = log.read()
-        print(contenu)
-    else:
-        exit()
 
 
 # This process is named connection_server because client connextion's are logged and used by server.

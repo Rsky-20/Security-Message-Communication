@@ -321,6 +321,7 @@ def process_response(data, data2, messager):
     return messager
 
 
+# On peut la renommer send() si le nom pose problème, mais cette fonction ne fait pas QUE envoyer
 def connection_client(HOST, PORT):
     """
     [description]
