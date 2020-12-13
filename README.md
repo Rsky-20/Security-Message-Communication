@@ -1,12 +1,12 @@
 # Security-Message-Communication
 ![Logo](https://drive.google.com/u/1/uc?id=1_RBn08Q8TRMmDEA_SXCWhVPL9TN0cznh&export=download)
 > # Description du projet
-    Le Porjet Security Message Community est une messagerie instannée basé sur le module socket.
-    SMC permet à deux personnes, pocédant le client fournie, de dialoguer de façon sécurisé et 
-    instantanné à traver une interface console.
+    Le Porjet Security Message Community est une messagerie instanné basé sur le module socket.
+    SMC permet à deux personnes, possédant le client fournie, de dialoguer de façon sécurisé et 
+    instantanné à travers une interface console.
     
 > # Utilisation
-    Afin de pouvoir jouir pleinnement du projet, il faut un environnement python configuré avec les 
+    Afin de pouvoir jouir pleinement du projet, il faut un environnement python configuré avec les 
     modules : datetime, select, socket.
     Une fois ces modules correctement installé dans votre environnement python,
     lancé votre IDLE ou autre programme similaire permettant d'ouvrir et lancé python.
@@ -35,25 +35,25 @@
         Executé les fichier python dans l'ordre suivant:
             > serveur.py --> client A --> client B
         
-        Le serveur sera sur écoute, le client A puis le client B seront connecté au serveur et prêt pour emploit
+        Le serveur sera sur écoute, le client A puis le client B seront connectés au serveur et prêt pour emploit.
 ***
         
 Le client A (client qui se connecte en premier) doit obligatoirement commencer la discussion.
-Le client B pourra alors aussi envoyer un message après  que le client A ai envoyé son message.
+Le client B pourra alors aussi envoyer un message après  que le client A envoie son message.
 
-Les clients auront 1 messages de décallage. 
+Les clients auront 1 message de décallage. 
 
 ***
 ## [Fonctionnement du projet]
 
-Le projet fonctionne grace au module socket. On a 3 programmes / script distint, le serveur, le client A et le client B.
-Dans la version actuelle, le projet n'accepte que 2 client de façon opérationnel (au delà de 2 la messagerie 
-instantannée sera innopérant).
+Le projet fonctionne grâce au module socket. On a 3 programmes / script distinct, le serveur, le client A et le client B.
+Dans la version actuelle, le projet n'accepte que 2 clients de façon opérationnelle (au-delà de 2 la messagerie 
+instantanné sera innopérant).
 Le serveur est conçu pour accepter n client, leur dialogue est basé sur le principe du ping-pong.
-L'utilisateur George écrit son message sur le client A, le message passe par un algoritme de chiffrement directement 
-intégré au client A. Puis le client connecté au serveur envoie le message chiffré à celui-ci. Le serveur reçoit 
+L'utilisateur George écrit son message sur le client A, le message passe par un algorithme de chiffrement directement 
+intégré au client A. Puis, le client connecté au serveur envoie le message chiffré à celui-ci. Le serveur reçoit 
 le message chiffré et la stocke sur un fichier log.txt uniquement géré par le serveur. Le serveur renvoie au client A
-le dernier message reçu avant celui envoyé par le client A. Une fois le message envoyé c'est au tour du Jacque qui a 
+le dernier message reçu avant celui envoyé par le client A. Une fois le message envoyé, c'est au tour du Jacque qui a 
 le client B d'interragir avec le serveur.
 
 Pour plus d'information sur le code, merci de bien vouloir lire la documentation dans le code.
@@ -62,13 +62,13 @@ Pour plus d'information sur le code, merci de bien vouloir lire la documentation
 
 ### Partie Requête 
 
-> Notre projet comporte deux types de interactions formant la communication ou canal.
+> Notre projet comporte deux types d'interactions formant la communication ou canal.
     Interaction 1 : la requête envoyée par le client au serveur. A ce moment-là le client envoie le message déjà chiffré 
-    au serveur et le serveur reçoit 
+    au serveur et le serveur reçois 
     Interaction 2 : La requête 'Réponse' est l'envoie des données contenues et stockés par le serveur vers le client
 
-Il y'a bien 2 interaction pour une communication entre client/serveur.
-Donc afin de communiquer, le schéma de communication se répète. Un client envoie puis reçoit et attend de pouvoir 
+Il y a bien 2 interactions pour une communication entre client et serveur.
+Donc, afin de communiquer, le schéma de communication se répète. Un client envoie puis reçoit et attend de pouvoir 
 recommuniquer avec le serveur une fois qu'il sera disposé à communiquer (une fois que l'autre client aura fini sa 
 communication avec le serveur).
 
